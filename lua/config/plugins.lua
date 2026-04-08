@@ -317,6 +317,11 @@ vim.keymap.set("n", "[t", function()
 end, { desc = "Prev todo" })
 
 -- Search & replace
+require("grug-far").setup({
+  keymaps = {
+    close = { n = "q" },
+  },
+})
 vim.keymap.set("n", "<leader>fr", "<cmd>GrugFar<cr>", { desc = "Search & replace" })
 
 -- ─── Git ──────────────────────────────────────────────────────────────────────
