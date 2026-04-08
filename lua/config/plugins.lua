@@ -96,7 +96,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 require("nvim-ts-autotag").setup({})
-require("ts-comments").setup({})
+require("ts-comments").setup({ lang = {} })
 
 -- Treesitter text objects — select and move by syntax node
 require("nvim-treesitter-textobjects").setup({})
@@ -235,8 +235,20 @@ snacks.setup({
   lazygit = { enabled = true },
   notifier = { enabled = true, timeout = 3000 },
   quickfile = { enabled = true },
+  terminal = { enabled = true },
   words = { enabled = true },
 })
+
+-- Toggle terminal: <C-`> opens/closes, count prefix selects instance (1<C-`>, 2<C-`>, etc.)
+local terminal_opts = {
+  win = {
+    position = "right",
+    width = 0.4,
+  },
+}
+vim.keymap.set({ "n", "t" }, "<C-`>", function()
+  snacks.terminal.focus(nil, terminal_opts)
+end, { desc = "Toggle terminal" })
 
 require("which-key").setup({})
 require("which-key").add({
@@ -321,8 +333,12 @@ gs.setup({
   },
 })
 
-vim.keymap.set("n", "]h", gs.next_hunk, { desc = "Next hunk" })
-vim.keymap.set("n", "[h", gs.prev_hunk, { desc = "Prev hunk" })
+vim.keymap.set("n", "]h", function()
+  gs.nav_hunk("next")
+end, { desc = "Next hunk" })
+vim.keymap.set("n", "[h", function()
+  gs.nav_hunk("prev")
+end, { desc = "Prev hunk" })
 vim.keymap.set("n", "<leader>hs", gs.stage_hunk, { desc = "Stage hunk" })
 vim.keymap.set("n", "<leader>hr", gs.reset_hunk, { desc = "Reset hunk" })
 vim.keymap.set("n", "<leader>hb", gs.blame_line, { desc = "Blame line" })
